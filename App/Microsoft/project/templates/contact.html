@@ -1,0 +1,354 @@
+{% extends "base.html" %}
+
+{% block title %}Contact - Space Station Tool Detection{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-lg-12 text-center">
+            <h1 class="display-4 fw-bold mb-3">Contact & Team</h1>
+            <p class="lead">Get in touch with our space technology development team</p>
+        </div>
+    </div>
+    
+    <!-- Team Section -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="team-section">
+                <h2 class="section-title text-center mb-5">
+                    <i class="fas fa-users me-3"></i>Development Team
+                </h2>
+                
+                <div class="row justify-content-center">
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="team-card">
+                            <div class="team-avatar">
+                                <i class="fas fa-user-astronaut"></i>
+                            </div>
+                            <div class="team-info">
+                                <h4>Chanchal Chaudhary</h4>
+                                <p class="team-role">ML/Training Lead</p>
+                                <p class="team-description">Expert in YOLOv8, computer vision, and synthetic data generation using Falcon Editor.</p>
+                                
+                                <div class="team-skills">
+                                    <span class="skill-tag">YOLOv8</span>
+                                    <span class="skill-tag">Computer Vision</span>
+                                    <span class="skill-tag">Falcon Editor</span>
+                                    <span class="skill-tag">PyTorch</span>
+                                </div>
+                                
+                                <div class="team-contact">
+                                    <a href="mailto:chanchalchaudhary0101@gmail.com" class="contact-link">
+                                        <i class="fas fa-envelope"></i>
+                                        chanchalchaudhary0101@gmail.com
+                                    </a>
+                                    <a href="tel:+919311316223" class="contact-link">
+                                        <i class="fas fa-phone"></i>
+                                        +91 9311316223
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="team-card">
+                            <div class="team-avatar">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <div class="team-info">
+                                <h4>Backend Developer</h4>
+                                <p class="team-role">Flask & Database Expert</p>
+                                <p class="team-description">Specializes in Flask backend development, MongoDB integration, and API design.</p>
+                                
+                                <div class="team-skills">
+                                    <span class="skill-tag">Flask</span>
+                                    <span class="skill-tag">MongoDB</span>
+                                    <span class="skill-tag">REST APIs</span>
+                                    <span class="skill-tag">Python</span>
+                                </div>
+                                
+                                <div class="team-contact">
+                                    <a href="mailto:backend@spacetools.dev" class="contact-link">
+                                        <i class="fas fa-envelope"></i>
+                                        backend@spacetools.dev
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="team-card">
+                            <div class="team-avatar">
+                                <i class="fas fa-palette"></i>
+                            </div>
+                            <div class="team-info">
+                                <h4>UI/UX Developer</h4>
+                                <p class="team-role">Frontend & Design Lead</p>
+                                <p class="team-description">Creates intuitive interfaces and engaging user experiences for space applications.</p>
+                                
+                                <div class="team-skills">
+                                    <span class="skill-tag">HTML/CSS</span>
+                                    <span class="skill-tag">JavaScript</span>
+                                    <span class="skill-tag">Bootstrap</span>
+                                    <span class="skill-tag">UI/UX</span>
+                                </div>
+                                
+                                <div class="team-contact">
+                                    <a href="mailto:frontend@spacetools.dev" class="contact-link">
+                                        <i class="fas fa-envelope"></i>
+                                        frontend@spacetools.dev
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Project Resources -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="resources-section">
+                <h2 class="section-title text-center mb-5">
+                    <i class="fas fa-book me-3"></i>Project Resources
+                </h2>
+                
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="resource-card">
+                            <div class="resource-icon">
+                                <i class="fab fa-github"></i>
+                            </div>
+                            <div class="resource-content">
+                                <h4>GitHub Repository</h4>
+                                <p>Complete source code, documentation, and development history</p>
+                                <a href="https://github.com/chanchal-chaudhary/space-tool-detection" class="btn btn-outline-primary" target="_blank">
+                                    <i class="fab fa-github me-2"></i>View Repository
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="resource-card">
+                            <div class="resource-icon">
+                                <i class="fas fa-file-pdf"></i>
+                            </div>
+                            <div class="resource-content">
+                                <h4>Project Report</h4>
+                                <p>Detailed technical documentation and research findings</p>
+                                <a href="#" class="btn btn-outline-primary">
+                                    <i class="fas fa-download me-2"></i>Download Report
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col-lg-6">
+                        <div class="resource-card">
+                            <div class="resource-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <div class="resource-content">
+                                <h4>Dataset & Models</h4>
+                                <p>Falcon-generated synthetic dataset and trained YOLOv8 weights</p>
+                                <a href="#" class="btn btn-outline-primary">
+                                    <i class="fas fa-cloud-download-alt me-2"></i>Access Dataset
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="resource-card">
+                            <div class="resource-icon">
+                                <i class="fas fa-play-circle"></i>
+                            </div>
+                            <div class="resource-content">
+                                <h4>Demo Video</h4>
+                                <p>Live demonstration of the detection system in action</p>
+                                <a href="#" class="btn btn-outline-primary">
+                                    <i class="fas fa-play me-2"></i>Watch Demo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Contact Form -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="contact-form-section">
+                <h2 class="section-title text-center mb-5">
+                    <i class="fas fa-envelope me-3"></i>Get In Touch
+                </h2>
+                
+                <form class="contact-form" id="contactForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="organization" class="form-label">Organization</label>
+                                <input type="text" class="form-control" id="organization">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="subject" class="form-label">Subject</label>
+                                <select class="form-control" id="subject" required>
+                                    <option value="">Select Subject</option>
+                                    <option value="collaboration">Collaboration Inquiry</option>
+                                    <option value="technical">Technical Question</option>
+                                    <option value="demo">Demo Request</option>
+                                    <option value="licensing">Licensing</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group mb-4">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea class="form-control" id="message" rows="5" required></textarea>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-rocket me-2"></i>Send Message
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Technical Specifications -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="tech-specs-section">
+                <h2 class="section-title text-center mb-5">
+                    <i class="fas fa-cog me-3"></i>Technical Specifications
+                </h2>
+                
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="spec-card">
+                            <h5><i class="fas fa-brain me-2"></i>AI Model</h5>
+                            <ul class="spec-list">
+                                <li>YOLOv8n (Nano version)</li>
+                                <li>Input Resolution: 640x640</li>
+                                <li>Inference Speed: ~45ms</li>
+                                <li>Model Size: 6.2MB</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="spec-card">
+                            <h5><i class="fas fa-server me-2"></i>Backend</h5>
+                            <ul class="spec-list">
+                                <li>Python 3.9+</li>
+                                <li>Flask 2.3.3</li>
+                                <li>OpenCV 4.8.1</li>
+                                <li>PyTorch 2.0.1</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="spec-card">
+                            <h5><i class="fas fa-database me-2"></i>Database</h5>
+                            <ul class="spec-list">
+                                <li>MongoDB 6.0+</li>
+                                <li>Document-based storage</li>
+                                <li>Real-time queries</li>
+                                <li>Cloud deployment ready</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Contact form handling
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get form data
+    const formData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        organization: document.getElementById('organization').value,
+        subject: document.getElementById('subject').value,
+        message: document.getElementById('message').value
+    };
+    
+    // Show loading state
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending...';
+    submitBtn.disabled = true;
+    
+    // Simulate form submission (replace with actual endpoint)
+    setTimeout(() => {
+        showToast('Message sent successfully! We\'ll get back to you soon.', 'success');
+        
+        // Reset form
+        e.target.reset();
+        
+        // Reset button
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    }, 2000);
+});
+
+// Add animation to cards on scroll
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, {
+    threshold: 0.1
+});
+
+// Observe all cards
+document.querySelectorAll('.team-card, .resource-card, .spec-card').forEach(card => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(card);
+});
+</script>
+{% endblock %}

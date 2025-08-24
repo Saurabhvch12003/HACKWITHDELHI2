@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+
+{% block title %}Project Details - Space Station Tool Detection{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-lg-12 text-center">
+            <h1 class="display-4 fw-bold mb-3">Project Overview</h1>
+            <p class="lead">Comprehensive tool detection system for space station safety</p>
+        </div>
+    </div>
+    
+    <!-- Problem Statement -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="info-card">
+                <div class="info-header">
+                    <i class="fas fa-exclamation-triangle text-warning"></i>
+                    <h3>Problem Statement</h3>
+                </div>
+                <div class="info-content">
+                    <p>Space stations require continuous monitoring of essential safety tools including Fire Extinguishers, Toolboxes, and Oxygen Tanks. Manual tracking is prone to human error and may compromise mission safety. Traditional monitoring systems lack real-time capabilities and intelligent alerting mechanisms.</p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="challenge-item">
+                                <i class="fas fa-clock text-danger"></i>
+                                <h5>Real-time Monitoring</h5>
+                                <p>Need instant detection and verification of tool presence</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="challenge-item">
+                                <i class="fas fa-shield-alt text-warning"></i>
+                                <h5>Safety Critical</h5>
+                                <p>Missing tools can compromise crew safety and mission success</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="challenge-item">
+                                <i class="fas fa-database text-info"></i>
+                                <h5>Data Tracking</h5>
+                                <p>Need comprehensive logging for compliance and analysis</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Solution Architecture -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="info-card">
+                <div class="info-header">
+                    <i class="fas fa-cogs text-primary"></i>
+                    <h3>Solution Architecture</h3>
+                </div>
+                <div class="info-content">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h5>Frontend Components</h5>
+                            <ul class="tech-list">
+                                <li><i class="fas fa-code"></i> HTML5, CSS3, JavaScript (ES6+)</li>
+                                <li><i class="fab fa-bootstrap"></i> Bootstrap 5 for responsive design</li>
+                                <li><i class="fas fa-video"></i> WebRTC for camera integration</li>
+                                <li><i class="fas fa-chart-bar"></i> Chart.js for data visualization</li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-6">
+                            <h5>Backend Components</h5>
+                            <ul class="tech-list">
+                                <li><i class="fab fa-python"></i> Python Flask web framework</li>
+                                <li><i class="fas fa-brain"></i> YOLOv8 (Ultralytics) for detection</li>
+                                <li><i class="fas fa-database"></i> MongoDB for data storage</li>
+                                <li><i class="fas fa-camera"></i> OpenCV for image processing</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dataset & Training -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="info-card">
+                <div class="info-header">
+                    <i class="fas fa-database text-success"></i>
+                    <h3>Dataset & Training</h3>
+                </div>
+                <div class="info-content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <h5>Falcon Synthetic Data</h5>
+                            <p>Our training dataset was generated using <strong>Falcon Editor by Duality AI</strong>, a high-quality synthetic data generation platform. This approach provides several advantages:</p>
+                            
+                            <div class="advantages-grid">
+                                <div class="advantage-item">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                    <span>Unlimited training data generation</span>
+                                </div>
+                                <div class="advantage-item">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                    <span>Perfect ground truth annotations</span>
+                                </div>
+                                <div class="advantage-item">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                    <span>Controlled lighting and environment</span>
+                                </div>
+                                <div class="advantage-item">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                    <span>Cost-effective compared to real data collection</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="training-stats">
+                                <h5>Training Statistics</h5>
+                                <div class="stat-item">
+                                    <span class="stat-label">Training Images:</span>
+                                    <span class="stat-value">2,500+</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Validation Images:</span>
+                                    <span class="stat-value">500+</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Epochs:</span>
+                                    <span class="stat-value">50</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Batch Size:</span>
+                                    <span class="stat-value">16</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Technical Implementation -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="info-card">
+                <div class="info-header">
+                    <i class="fas fa-wrench text-info"></i>
+                    <h3>Technical Implementation</h3>
+                </div>
+                <div class="info-content">
+                    <div class="implementation-flow">
+                        <div class="flow-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h5>Data Acquisition</h5>
+                                <p>Webcam feed or image upload captured via frontend interface</p>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                        <div class="flow-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h5>Preprocessing</h5>
+                                <p>Image normalization and resizing using OpenCV</p>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                        <div class="flow-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h5>YOLOv8 Inference</h5>
+                                <p>Real-time object detection with confidence scoring</p>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                        <div class="flow-step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h5>Post-processing</h5>
+                                <p>Bounding box visualization and alert generation</p>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                        <div class="flow-step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <h5>Data Storage</h5>
+                                <p>Detection results logged to MongoDB with timestamps</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Future Enhancements -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="info-card">
+                <div class="info-header">
+                    <i class="fas fa-rocket text-warning"></i>
+                    <h3>Future Enhancements</h3>
+                </div>
+                <div class="info-content">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Technical Improvements</h5>
+                            <ul class="enhancement-list">
+                                <li>Edge computing deployment for reduced latency</li>
+                                <li>Multi-camera integration for full station coverage</li>
+                                <li>3D spatial tracking of tool positions</li>
+                                <li>Integration with existing space station systems</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Feature Additions</h5>
+                            <ul class="enhancement-list">
+                                <li>Voice-based alerts and notifications</li>
+                                <li>Predictive maintenance scheduling</li>
+                                <li>Tool usage analytics and optimization</li>
+                                <li>Automated inventory management</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

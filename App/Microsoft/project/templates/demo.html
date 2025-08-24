@@ -1,0 +1,405 @@
+{% extends "base.html" %}
+
+{% block title %}Demo - Space Station Tool Detection{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="row">
+        <div class="col-lg-12 text-center mb-5">
+            <h1 class="display-4 fw-bold mb-3">Live Detection Demo</h1>
+            <p class="lead">Test the tool detection system using your webcam or upload an image</p>
+        </div>
+    </div>
+    
+    <!-- Demo Controls -->
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <div class="demo-controls">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-primary" id="webcamBtn">
+                        <i class="fas fa-video me-2"></i>Webcam Detection
+                    </button>
+                    <button type="button" class="btn btn-outline-primary" id="uploadBtn">
+                        <i class="fas fa-upload me-2"></i>Upload Image
+                    </button>
+                </div>
+                <div class="ms-3">
+                    <button type="button" class="btn btn-success" id="startCamera" style="display: none;">
+                        <i class="fas fa-play me-2"></i>Start Camera
+                    </button>
+                    <button type="button" class="btn btn-danger" id="stopCamera" style="display: none;">
+                        <i class="fas fa-stop me-2"></i>Stop Camera
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Detection Area -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="detection-area">
+                <!-- Webcam View -->
+                <div id="webcamView" class="detection-view" style="display: none;">
+                    <div class="camera-container">
+                        <img id="videoFeed" src="" alt="Live Feed" class="img-fluid rounded-4">
+                        <div class="camera-status" id="cameraStatus">
+                            <i class="fas fa-circle text-success me-2"></i>
+                            <span>Camera Active</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Upload View -->
+                <div id="uploadView" class="detection-view">
+                    <div class="upload-area" id="dropZone">
+                        <div class="upload-content">
+                            <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
+                            <h4>Drop image here or click to upload</h4>
+                            <p class="text-muted">Supports JPG, PNG files</p>
+                            <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                            <button class="btn btn-outline-primary" onclick="document.getElementById('imageInput').click();">
+                                Choose File
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="uploadPreview" style="display: none;">
+                        <img id="uploadedImage" src="" alt="Uploaded Image" class="img-fluid rounded-4">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Detection Results -->
+        <div class="col-lg-4">
+            <div class="results-panel">
+                <h4 class="mb-3">
+                    <i class="fas fa-search me-2"></i>Detection Results
+                </h4>
+                
+                <!-- Status -->
+                <div class="alert alert-info" id="detectionStatus">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <span>Waiting for input...</span>
+                </div>
+                
+                <!-- Live Detections -->
+                <div id="detectionsContainer">
+                    <div class="text-center text-muted">
+                        <i class="fas fa-search fa-2x mb-3"></i>
+                        <p>Start detection to see results</p>
+                    </div>
+                </div>
+                
+                <!-- Alert Panel -->
+                 <div class="alert-panel mt-4" id="alertPanel" style="display: none;">
+                    <h5 class="text-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Alerts
+                    </h5>
+                    <div id="alertsList"></div> 
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let cameraActive = false;
+let detectionInterval = null;
+
+// UI Elements
+const webcamBtn = document.getElementById('webcamBtn');
+const uploadBtn = document.getElementById('uploadBtn');
+const startCamera = document.getElementById('startCamera');
+const stopCamera = document.getElementById('stopCamera');
+const webcamView = document.getElementById('webcamView');
+const uploadView = document.getElementById('uploadView');
+const videoFeed = document.getElementById('videoFeed');
+const cameraStatus = document.getElementById('cameraStatus');
+const detectionStatus = document.getElementById('detectionStatus');
+const detectionsContainer = document.getElementById('detectionsContainer');
+const alertPanel = document.getElementById('alertPanel');
+const alertsList = document.getElementById('alertsList');
+const imageInput = document.getElementById('imageInput');
+const dropZone = document.getElementById('dropZone');
+const uploadPreview = document.getElementById('uploadPreview');
+const uploadedImage = document.getElementById('uploadedImage');
+
+// Mode switching
+webcamBtn.addEventListener('click', () => {
+    switchMode('webcam');
+});
+
+uploadBtn.addEventListener('click', () => {
+    switchMode('upload');
+});
+
+function switchMode(mode) {
+    if (mode === 'webcam') {
+        webcamBtn.classList.add('btn-primary');
+        webcamBtn.classList.remove('btn-outline-primary');
+        uploadBtn.classList.add('btn-outline-primary');
+        uploadBtn.classList.remove('btn-primary');
+        
+        webcamView.style.display = 'block';
+        uploadView.style.display = 'none';
+        startCamera.style.display = 'inline-block';
+        stopCamera.style.display = 'none';
+        
+        updateStatus('Click "Start Camera" to begin detection');
+    } else {
+        uploadBtn.classList.add('btn-primary');
+        uploadBtn.classList.remove('btn-outline-primary');
+        webcamBtn.classList.add('btn-outline-primary');
+        webcamBtn.classList.remove('btn-primary');
+        
+        webcamView.style.display = 'none';
+        uploadView.style.display = 'block';
+        startCamera.style.display = 'none';
+        stopCamera.style.display = 'none';
+        
+        stopCameraFeed();
+        updateStatus('Upload an image to detect tools');
+    }
+}
+
+// Camera controls
+startCamera.addEventListener('click', startCameraFeed);
+stopCamera.addEventListener('click', stopCameraFeed);
+
+async function startCameraFeed() {
+    try {
+        const response = await fetch('/start_camera');
+        const result = await response.json();
+        
+        if (result.success) {
+            cameraActive = true;
+            startCamera.style.display = 'none';
+            stopCamera.style.display = 'inline-block';
+            
+            // Start video feed
+            videoFeed.src = '/video_feed?' + new Date().getTime();
+            
+            // Start detection polling
+            detectionInterval = setInterval(updateLiveDetections, 1000);
+            
+            updateStatus('Camera active - detecting tools...', 'success');
+            cameraStatus.innerHTML = '<i class="fas fa-circle text-success me-2"></i><span>Camera Active</span>';
+        } else {
+            showToast('Failed to start camera: ' + result.error, 'error');
+        }
+    } catch (error) {
+        showToast('Camera error: ' + error.message, 'error');
+    }
+}
+
+async function stopCameraFeed() {
+    try {
+        await fetch('/stop_camera');
+        cameraActive = false;
+        
+        startCamera.style.display = 'inline-block';
+        stopCamera.style.display = 'none';
+        
+        videoFeed.src = '';
+        
+        if (detectionInterval) {
+            clearInterval(detectionInterval);
+            detectionInterval = null;
+        }
+        
+        updateStatus('Camera stopped');
+        cameraStatus.innerHTML = '<i class="fas fa-circle text-danger me-2"></i><span>Camera Inactive</span>';
+        clearDetections();
+    } catch (error) {
+        console.error('Stop camera error:', error);
+    }
+}
+
+// Live detections update
+async function updateLiveDetections() {
+    if (!cameraActive) return;
+    
+    try {
+        const response = await fetch('/get_live_detections');
+        const data = await response.json();
+        
+        if (data.active && data.detections.length > 0) {
+            displayDetections(data.detections);
+            checkAlerts(data.detections);
+        } else if (data.active) {
+            // Camera active but no detections
+            updateStatus('Camera active - no tools detected', 'warning');
+        }
+    } catch (error) {
+        console.error('Detection update error:', error);
+    }
+}
+
+// Image upload handling
+imageInput.addEventListener('change', handleImageUpload);
+dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('drag-over');
+});
+
+dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('drag-over');
+});
+
+dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+        handleImageFile(files[0]);
+    }
+});
+
+dropZone.addEventListener('click', () => {
+    imageInput.click();
+});
+
+function handleImageUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+        handleImageFile(file);
+    }
+}
+
+async function handleImageFile(file) {
+    if (!file.type.startsWith('image/')) {
+        showToast('Please select an image file', 'error');
+        return;
+    }
+    
+    updateStatus('Processing image...', 'info');
+    
+    const formData = new FormData();
+    formData.append('image', file);
+    
+    try {
+        const response = await fetch('/upload_image', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Show processed image
+            uploadedImage.src = result.image;
+            uploadView.querySelector('.upload-area').style.display = 'none';
+            uploadPreview.style.display = 'block';
+            
+            // Display detections
+            if (result.detections.length > 0) {
+                displayDetections(result.detections);
+                checkAlerts(result.detections);
+                updateStatus(`Found ${result.detections.length} tools`, 'success');
+            } else {
+                updateStatus('No tools detected in image', 'warning');
+                clearDetections();
+            }
+        } else {
+            showToast('Upload failed: ' + result.error, 'error');
+            updateStatus('Upload failed', 'danger');
+        }
+    } catch (error) {
+        showToast('Upload error: ' + error.message, 'error');
+        updateStatus('Upload error', 'danger');
+    }
+}
+
+// Display functions
+function displayDetections(detections) {
+    const container = detectionsContainer;
+    container.innerHTML = '';
+    
+    if (detections.length === 0) {
+        container.innerHTML = `
+            <div class="text-center text-muted">
+                <i class="fas fa-search fa-2x mb-3"></i>
+                <p>No tools detected</p>
+            </div>
+        `;
+        return;
+    }
+    
+    detections.forEach((detection, index) => {
+        const detectionCard = document.createElement('div');
+        detectionCard.className = 'detection-card mb-3';
+        detectionCard.innerHTML = `
+            <div class="d-flex align-items-center">
+                <div class="detection-icon me-3">
+                    <i class="fas ${getToolIcon(detection.tool)}"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <h6 class="mb-1">${detection.tool}</h6>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-success" style="width: ${detection.confidence * 100}%"></div>
+                    </div>
+                    <small class="text-muted">${(detection.confidence * 100).toFixed(1)}% confidence</small>
+                </div>
+            </div>
+        `;
+        container.appendChild(detectionCard);
+    });
+}
+
+function checkAlerts(detections) {
+    const requiredTools = ['Fire Extinguisher', 'Toolbox', 'Oxygen Tank'];
+    const detectedTools = detections.map(d => d.tool);
+    const missingTools = requiredTools.filter(tool => !detectedTools.includes(tool));
+    
+    if (missingTools.length > 0) {
+        alertPanel.style.display = 'block';
+        alertsList.innerHTML = missingTools.map(tool => `
+            <div class="alert alert-warning mb-2">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Missing: ${tool}
+            </div>
+        `).join('');
+    } else {
+        alertPanel.style.display = 'none';
+    }
+}
+
+function getToolIcon(tool) {
+    const iconMap = {
+        'Fire Extinguisher': 'fa-fire-extinguisher',
+        'Toolbox': 'fa-toolbox',
+        'Oxygen Tank': 'fa-flask'
+    };
+    return iconMap[tool] || 'fa-wrench';
+}
+
+function updateStatus(message, type = 'info') {
+    const statusEl = detectionStatus;
+    statusEl.className = `alert alert-${type}`;
+    statusEl.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 
+                         type === 'warning' ? 'exclamation-triangle' : 
+                         type === 'danger' ? 'times-circle' : 'info-circle'} me-2"></i>
+        <span>${message}</span>
+    `;
+}
+
+function clearDetections() {
+    detectionsContainer.innerHTML = `
+        <div class="text-center text-muted">
+            <i class="fas fa-search fa-2x mb-3"></i>
+            <p>Start detection to see results</p>
+        </div>
+    `;
+    alertPanel.style.display = 'none';
+}
+
+// Initialize with upload mode
+switchMode('upload');
+</script>
+{% endblock %}

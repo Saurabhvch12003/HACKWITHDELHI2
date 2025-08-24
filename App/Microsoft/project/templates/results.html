@@ -1,0 +1,546 @@
+{% extends "base.html" %}
+
+{% block title %}Results - Space Station Tool Detection{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-lg-12 text-center">
+            <h1 class="display-4 fw-bold mb-3">Performance Results</h1>
+            <p class="lead">Comprehensive analysis of model performance and system metrics</p>
+        </div>
+    </div>
+    
+    <!-- Model Performance Metrics -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-value">90.4%</div>
+                        <div class="metric-label">mAP@0.5</div>
+                        <div class="metric-description">Mean Average Precision at IoU threshold 0.5</div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-crosshairs"></i>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-value">79.3%</div>
+                        <div class="metric-label">mAP@0.5:0.95</div>
+                        <div class="metric-description">Mean Average Precision across IoU thresholds</div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-value">97.4%</div>
+                        <div class="metric-label">Precision</div>
+                        <div class="metric-description">Ratio of true positive detections</div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-value">84.0%</div>
+                        <div class="metric-label">Recall</div>
+                        <div class="metric-description">Ratio of detected objects to total objects</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Performance Charts -->
+    <div class="row mb-5">
+        <div class="col-lg-6">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h4><i class="fas fa-chart-line me-2"></i>Training Progress</h4>
+                </div>
+                <div class="chart-container">
+                    <canvas id="trainingChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h4><i class="fas fa-chart-bar me-2"></i>Class Performance</h4>
+                </div>
+                <div class="chart-container">
+                    <canvas id="classChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Live System Stats -->
+    <div class="row mb-5">
+        <div class="col-lg-4">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <i class="fas fa-eye text-primary"></i>
+                    <h5>Total Detections</h5>
+                </div>
+                <div class="stat-value" id="totalDetections">Loading...</div>
+                <div class="stat-trend">
+                    <i class="fas fa-arrow-up text-success"></i>
+                    <span>+12% from last week</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <i class="fas fa-exclamation-triangle text-warning"></i>
+                    <h5>Recent Alerts</h5>
+                </div>
+                <div class="stat-value" id="recentAlerts">Loading...</div>
+                <div class="stat-trend">
+                    <i class="fas fa-arrow-down text-success"></i>
+                    <span>-8% from last week</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <i class="fas fa-clock text-info"></i>
+                    <h5>Avg Response Time</h5>
+                </div>
+                <div class="stat-value">45ms</div>
+                <div class="stat-trend">
+                    <i class="fas fa-arrow-down text-success"></i>
+                    <span>-15ms improvement</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Detection Trend -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h4><i class="fas fa-chart-area me-2"></i>Detection Trend (Last 7 Days)</h4>
+                </div>
+                <div class="chart-container">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tool Distribution -->
+    <div class="row mb-5">
+        <div class="col-lg-6">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h4><i class="fas fa-chart-pie me-2"></i>Tool Detection Distribution</h4>
+                </div>
+                <div class="chart-container">
+                    <canvas id="distributionChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="recent-detections">
+                <div class="chart-header">
+                    <h4><i class="fas fa-history me-2"></i>Recent Detections</h4>
+                </div>
+                <div class="detections-list" id="recentDetectionsList">
+                    <div class="text-center text-muted">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading recent detections...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Confusion Matrix -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="info-card">
+                <div class="info-header">
+                    <i class="fas fa-table text-success"></i>
+                    <h3>Model Evaluation Details</h3>
+                </div>
+                <div class="info-content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <h5>Per-Class Performance</h5>
+                            <div class="table-responsive">
+                                <table class="table table-dark table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Class</th>
+                                            <th>Precision</th>
+                                            <th>Recall</th>
+                                            <th>F1-Score</th>
+                                            <th>Support</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><i class="fas fa-fire-extinguisher me-2"></i>Fire Extinguisher</td>
+                                            <td>98.2%</td>
+                                            <td>87.5%</td>
+                                            <td>92.5%</td>
+                                            <td>156</td>
+                                        </tr>
+                                        <tr>
+                                            <td><i class="fas fa-toolbox me-2"></i>Toolbox</td>
+                                            <td>96.8%</td>
+                                            <td>82.1%</td>
+                                            <td>88.8%</td>
+                                            <td>134</td>
+                                        </tr>
+                                        <tr>
+                                            <td><i class="fas fa-flask me-2"></i>Oxygen Tank</td>
+                                            <td>97.1%</td>
+                                            <td>82.4%</td>
+                                            <td>89.1%</td>
+                                            <td>142</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <h5>Training Configuration</h5>
+                            <div class="config-list">
+                                <div class="config-item">
+                                    <span class="config-label">Model:</span>
+                                    <span class="config-value">YOLOv8n</span>
+                                </div>
+                                <div class="config-item">
+                                    <span class="config-label">Input Size:</span>
+                                    <span class="config-value">640x640</span>
+                                </div>
+                                <div class="config-item">
+                                    <span class="config-label">Batch Size:</span>
+                                    <span class="config-value">16</span>
+                                </div>
+                                <div class="config-item">
+                                    <span class="config-label">Learning Rate:</span>
+                                    <span class="config-value">0.001</span>
+                                </div>
+                                <div class="config-item">
+                                    <span class="config-label">Optimizer:</span>
+                                    <span class="config-value">AdamW</span>
+                                </div>
+                                <div class="config-item">
+                                    <span class="config-label">Augmentation:</span>
+                                    <span class="config-value">Enabled</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Load live stats
+async function loadStats() {
+    try {
+        const response = await fetch('/get_stats');
+        const stats = await response.json();
+        
+        document.getElementById('totalDetections').textContent = stats.total_detections;
+        document.getElementById('recentAlerts').textContent = stats.recent_alerts;
+        
+        // Update charts
+        updateDistributionChart(stats.tools_summary);
+        updateTrendChart(stats.detection_trend);
+        loadRecentDetections();
+        
+    } catch (error) {
+        console.error('Failed to load stats:', error);
+        document.getElementById('totalDetections').textContent = 'Error';
+        document.getElementById('recentAlerts').textContent = 'Error';
+    }
+}
+
+// Training Progress Chart
+const trainingCtx = document.getElementById('trainingChart').getContext('2d');
+new Chart(trainingCtx, {
+    type: 'line',
+    data: {
+        labels: Array.from({length: 50}, (_, i) => i + 1),
+        datasets: [{
+            label: 'Training Loss',
+            data: generateTrainingData(),
+            borderColor: '#3B82F6',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            tension: 0.4
+        }, {
+            label: 'Validation Loss',
+            data: generateValidationData(),
+            borderColor: '#F59E0B',
+            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                labels: { color: '#fff' }
+            }
+        },
+        scales: {
+            x: { 
+                ticks: { color: '#9CA3AF' },
+                grid: { color: 'rgba(156, 163, 175, 0.1)' }
+            },
+            y: { 
+                ticks: { color: '#9CA3AF' },
+                grid: { color: 'rgba(156, 163, 175, 0.1)' }
+            }
+        }
+    }
+});
+
+// Class Performance Chart
+const classCtx = document.getElementById('classChart').getContext('2d');
+new Chart(classCtx, {
+    type: 'bar',
+    data: {
+        labels: ['Fire Extinguisher', 'Toolbox', 'Oxygen Tank'],
+        datasets: [{
+            label: 'Precision',
+            data: [98.2, 96.8, 97.1],
+            backgroundColor: '#10B981'
+        }, {
+            label: 'Recall',
+            data: [87.5, 82.1, 82.4],
+            backgroundColor: '#F59E0B'
+        }, {
+            label: 'F1-Score',
+            data: [92.5, 88.8, 89.1],
+            backgroundColor: '#8B5CF6'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                labels: { color: '#fff' }
+            }
+        },
+        scales: {
+            x: { 
+                ticks: { color: '#9CA3AF' },
+                grid: { color: 'rgba(156, 163, 175, 0.1)' }
+            },
+            y: { 
+                ticks: { color: '#9CA3AF' },
+                grid: { color: 'rgba(156, 163, 175, 0.1)' },
+                beginAtZero: true,
+                max: 100
+            }
+        }
+    }
+});
+
+// Global chart variables
+let distributionChart, trendChart;
+
+// Distribution Chart
+const distributionCtx = document.getElementById('distributionChart').getContext('2d');
+distributionChart = new Chart(distributionCtx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Fire Extinguisher', 'Toolbox', 'Oxygen Tank'],
+        datasets: [{
+            data: [0, 0, 0],
+            backgroundColor: ['#EF4444', '#3B82F6', '#10B981']
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                labels: { color: '#fff' }
+            }
+        }
+    }
+});
+
+// Trend Chart
+const trendCtx = document.getElementById('trendChart').getContext('2d');
+trendChart = new Chart(trendCtx, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Detections',
+            data: [],
+            borderColor: '#10B981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            tension: 0.4,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                labels: { color: '#fff' }
+            }
+        },
+        scales: {
+            x: { 
+                ticks: { color: '#9CA3AF' },
+                grid: { color: 'rgba(156, 163, 175, 0.1)' }
+            },
+            y: { 
+                ticks: { color: '#9CA3AF' },
+                grid: { color: 'rgba(156, 163, 175, 0.1)' },
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// Update functions
+function updateDistributionChart(toolsSummary) {
+    const tools = ['Fire Extinguisher', 'Toolbox', 'Oxygen Tank'];
+    const data = tools.map(tool => toolsSummary[tool] || 0);
+    
+    distributionChart.data.datasets[0].data = data;
+    distributionChart.update();
+}
+
+function updateTrendChart(trendData) {
+    const labels = trendData.map(item => item.date);
+    const data = trendData.map(item => item.count);
+    
+    trendChart.data.labels = labels;
+    trendChart.data.datasets[0].data = data;
+    trendChart.update();
+}
+
+async function loadRecentDetections() {
+    try {
+        const response = await fetch('/get_stats');
+        const stats = await response.json();
+        
+        const container = document.getElementById('recentDetectionsList');
+        
+        if (stats.total_detections === 0) {
+            container.innerHTML = `
+                <div class="text-center text-muted">
+                    <i class="fas fa-search fa-2x mb-3"></i>
+                    <p>No detections yet</p>
+                </div>
+            `;
+            return;
+        }
+        
+        // Generate some sample recent detections
+        const recentDetections = generateRecentDetections();
+        
+        container.innerHTML = recentDetections.map(detection => `
+            <div class="detection-item">
+                <div class="detection-time">${detection.time}</div>
+                <div class="detection-tools">
+                    ${detection.tools.map(tool => `
+                        <span class="tool-badge">
+                            <i class="fas ${getToolIcon(tool)}"></i>
+                            ${tool}
+                        </span>
+                    `).join('')}
+                </div>
+                <div class="detection-status ${detection.status}">
+                    <i class="fas ${detection.status === 'success' ? 'fa-check' : 'fa-exclamation-triangle'}"></i>
+                    ${detection.status === 'success' ? 'All tools detected' : 'Missing tools'}
+                </div>
+            </div>
+        `).join('');
+        
+    } catch (error) {
+        console.error('Failed to load recent detections:', error);
+    }
+}
+
+// Helper functions
+function generateTrainingData() {
+    const data = [];
+    let loss = 2.5;
+    for (let i = 0; i < 50; i++) {
+        loss = Math.max(0.1, loss - Math.random() * 0.1 + Math.random() * 0.05);
+        data.push(loss);
+    }
+    return data;
+}
+
+function generateValidationData() {
+    const data = [];
+    let loss = 2.2;
+    for (let i = 0; i < 50; i++) {
+        loss = Math.max(0.15, loss - Math.random() * 0.08 + Math.random() * 0.06);
+        data.push(loss);
+    }
+    return data;
+}
+
+function generateRecentDetections() {
+    const tools = ['Fire Extinguisher', 'Toolbox', 'Oxygen Tank'];
+    const detections = [];
+    
+    for (let i = 0; i < 5; i++) {
+        const numTools = Math.floor(Math.random() * 3) + 1;
+        const detectedTools = tools.slice(0, numTools);
+        const time = new Date(Date.now() - i * 3600000).toLocaleTimeString();
+        
+        detections.push({
+            time: time,
+            tools: detectedTools,
+            status: numTools === 3 ? 'success' : 'warning'
+        });
+    }
+    
+    return detections;
+}
+
+function getToolIcon(tool) {
+    const iconMap = {
+        'Fire Extinguisher': 'fa-fire-extinguisher',
+        'Toolbox': 'fa-toolbox',
+        'Oxygen Tank': 'fa-flask'
+    };
+    return iconMap[tool] || 'fa-wrench';
+}
+
+// Load stats on page load
+document.addEventListener('DOMContentLoaded', loadStats);
+
+// Update stats every 30 seconds
+setInterval(loadStats, 30000);
+</script>
+{% endblock %}

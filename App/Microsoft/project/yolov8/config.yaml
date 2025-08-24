@@ -1,0 +1,80 @@
+# YOLOv8 Configuration for Space Tool Detection
+
+# Dataset configuration
+path: ./dataset  # Path to dataset
+train: images/train  # Training images
+val: images/val  # Validation images
+
+# Class names
+names:
+  0: Fire Extinguisher
+  1: Toolbox  
+  2: Oxygen Tank
+
+# Number of classes
+nc: 3
+
+# Training hyperparameters
+epochs: 50
+batch_size: 16
+imgsz: 640
+lr0: 0.001
+weight_decay: 0.0005
+momentum: 0.937
+warmup_epochs: 3
+warmup_momentum: 0.8
+warmup_bias_lr: 0.1
+
+# Data augmentation
+hsv_h: 0.015
+hsv_s: 0.7
+hsv_v: 0.4
+degrees: 0.5
+translate: 0.1
+scale: 0.5
+shear: 0.0
+perspective: 0.0
+flipud: 0.0
+fliplr: 0.5
+mosaic: 1.0
+mixup: 0.0
+
+# Model configuration
+model: yolov8n.pt  # Base model
+device: 0  # GPU device (0 for first GPU, cpu for CPU)
+workers: 8  # Number of worker threads
+project: runs/detect  # Project directory
+name: space_tools  # Experiment name
+
+# Validation settings
+val: True
+save_json: False
+save_hybrid: False
+conf: 0.25  # Confidence threshold
+iou: 0.45  # IoU threshold for NMS
+max_det: 300  # Maximum detections per image
+half: False  # Use FP16 half-precision inference
+dnn: False  # Use OpenCV DNN for ONNX inference
+
+# Training settings
+resume: False  # Resume training from last checkpoint
+nosave: False  # Only save final checkpoint
+noval: False  # Only validate final epoch
+noautoanchor: False  # Disable autoanchor check
+evolve: False  # Evolve hyperparameters
+bucket: ''  # gsutil bucket
+cache: False  # True/ram, disk or False
+image_weights: False  # Use weighted image selection
+device: ''  # cuda device, i.e. 0 or 0,1,2,3 or cpu
+multi_scale: False  # Vary img-size +/- 50%
+single_cls: False  # Treat as single-class dataset
+adam: False  # Use torch.optim.Adam() optimizer
+sync_bn: False  # Use SyncBatchNorm, only available in DDP mode
+local_rank: -1  # DDP parameter
+quad: False  # Quad dataloader
+linear_lr: False  # Linear LR
+label_smoothing: 0.0  # Label smoothing epsilon
+upload_dataset: False  # Upload dataset to W&B
+bbox_interval: -1  # W&B bbox image logging interval (<= 0 to disable)
+save_period: -1  # Log model after every "save_period" epochs
+artifact_alias: latest  # Version of dataset artifact to use
